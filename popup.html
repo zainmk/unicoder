@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unicoder</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <h1>unicoder</h1>
+      <p>unicode anywhere, instantly</p>
+    </div>
+    <img src="icon48.png" alt="Unicoder logo" class="header-icon" />
+  </header>
+
+  <div class="tip">
+    Type unicode followed by the '/' (ex. <code>/2192</code> or <code>/rarrow</code>) in <i> any </i> text field in your browser — a tooltip appears above the cursor. Click it or hit <strong>Tab</strong> to insert.
+  </div>
+
+  <div class="search-wrap">
+    <input id="search" type="text" placeholder="Search alias or code point (e.g. arrow, 1F44D)" autocomplete="off" spellcheck="false" />
+  </div>
+
+  <div id="custom-section">
+    <div class="custom-header">
+      <span class="section-label">Custom</span>
+      <button id="add-btn" title="Add custom mapping">+</button>
+    </div>
+    <div id="add-form">
+      <span class="slash-prefix">/</span>
+      <input id="alias-input" type="text" placeholder="alias" autocomplete="off" spellcheck="false" maxlength="32" />
+      <span class="form-sep">→</span>
+      <input id="char-input" type="text" placeholder="👍 · 1F44D · 1F44D 2192 · ¯\_(ツ)_/¯" autocomplete="off" />
+      <button id="save-btn">Add</button>
+    </div>
+    <div id="add-error"></div>
+    <div id="custom-list"></div>
+  </div>
+
+  <div id="reference"></div>
+
+  <footer>
+    Hex: <span>/XXXX</span> &nbsp;|&nbsp; Named: <span>/alias</span> (case-sensitive)
+  </footer>
+
+  <script src="aliases.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
