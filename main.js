@@ -15,13 +15,14 @@ function parseCode(raw) {
   // Custom aliases take priority so users can override built-ins.
   if (token in customAliases) return customAliases[token];
 
+  // Named aliases checked before hex so e.g. "da" → 大, not 0xDA → Ú.
+  if (token in UNICODE_ALIASES) return UNICODE_ALIASES[token];
+
   if (/^[0-9a-fA-F]{1,6}$/.test(token)) {
     const cp = parseInt(token, 16);
     if (cp >= 0 && cp <= 0x10ffff) return String.fromCodePoint(cp);
-    return null;
   }
-
-  return token in UNICODE_ALIASES ? UNICODE_ALIASES[token] : null;
+  return null;
 }
 
 function isEditable(el) {
@@ -177,9 +178,16 @@ function showHover(x, y, unicodeChar, wordInfo, el) {
     pointerEvents: 'all',
   });
 
-  tip.innerHTML =
-    `<span style="font-size:17px;line-height:1">${unicodeChar}</span>` +
-    `<span style="opacity:0.6;font-size:11px">${cpLabel} &nbsp;·&nbsp; Tab</span>`;
+  const glyphSpan = document.createElement('span');
+  Object.assign(glyphSpan.style, { fontSize: '17px', lineHeight: '1' });
+  glyphSpan.textContent = unicodeChar;
+
+  const labelSpan = document.createElement('span');
+  Object.assign(labelSpan.style, { opacity: '0.6', fontSize: '11px' });
+  labelSpan.textContent = `${cpLabel} ·  Tab`;
+
+  tip.appendChild(glyphSpan);
+  tip.appendChild(labelSpan);
 
   tip.addEventListener('mousedown', e => e.preventDefault());
   tip.addEventListener('click', insertHoverChar);

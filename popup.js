@@ -48,18 +48,32 @@ function buildRow(key, char) {
   const row = document.createElement('div');
   row.className = 'alias-row';
   row.title = `Click to copy /${key}`;
-  row.innerHTML =
-    `<span class="alias-glyph">${char}</span>` +
-    `<div class="alias-info">` +
-      `<div class="alias-name">/${key}</div>` +
-      `<div class="alias-cp">${codePointLabel(char)}</div>` +
-    `</div>`;
+
+  const glyph = document.createElement('span');
+  glyph.className = 'alias-glyph';
+  glyph.textContent = char;
+
+  const info = document.createElement('div');
+  info.className = 'alias-info';
+
+  const nameEl = document.createElement('div');
+  nameEl.className = 'alias-name';
+  nameEl.textContent = `/${key}`;
+
+  const cpEl = document.createElement('div');
+  cpEl.className = 'alias-cp';
+  cpEl.textContent = codePointLabel(char);
+
+  info.appendChild(nameEl);
+  info.appendChild(cpEl);
+  row.appendChild(glyph);
+  row.appendChild(info);
+
   row.addEventListener('click', () => {
     navigator.clipboard.writeText(char).then(() => {
-      const g = row.querySelector('.alias-glyph');
-      const orig = g.textContent;
-      g.textContent = '✓';
-      setTimeout(() => { g.textContent = orig; }, 900);
+      const orig = glyph.textContent;
+      glyph.textContent = '✓';
+      setTimeout(() => { glyph.textContent = orig; }, 900);
     });
   });
   return row;
@@ -72,19 +86,39 @@ function renderCustomList() {
   Object.entries(customAliases).forEach(([key, char]) => {
     const item = document.createElement('div');
     item.className = 'custom-item';
-    item.innerHTML =
-      `<div class="alias-info">` +
-        `<div class="alias-name">/${key}</div>` +
-        `<div class="alias-cp">${codePointLabel(char)}</div>` +
-      `</div>` +
-      `<span class="alias-glyph">${char}</span>` +
-      `<button class="delete-btn" title="Remove">×</button>`;
 
-    item.querySelector('.alias-glyph').addEventListener('click', () => {
+    const info = document.createElement('div');
+    info.className = 'alias-info';
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'alias-name';
+    nameEl.textContent = `/${key}`;
+
+    const cpEl = document.createElement('div');
+    cpEl.className = 'alias-cp';
+    cpEl.textContent = codePointLabel(char);
+
+    info.appendChild(nameEl);
+    info.appendChild(cpEl);
+
+    const glyph = document.createElement('span');
+    glyph.className = 'alias-glyph';
+    glyph.textContent = char;
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'delete-btn';
+    delBtn.title = 'Remove';
+    delBtn.textContent = '×';
+
+    item.appendChild(info);
+    item.appendChild(glyph);
+    item.appendChild(delBtn);
+
+    glyph.addEventListener('click', () => {
       navigator.clipboard.writeText(char);
     });
 
-    item.querySelector('.delete-btn').addEventListener('click', () => {
+    delBtn.addEventListener('click', () => {
       delete customAliases[key];
       chrome.storage.sync.set({ customAliases });
       renderCustomList();
