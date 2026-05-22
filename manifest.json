@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "unicoder",
   "version": "1.0",
-  "description": "Tool to convert and map text to unicode characters for quick inserts and lookups.",
+  "description": "Type '/alias' in any text field to instantly insert emoji, Unicode symbols, special characters, or saved text snippets.",
   "permissions": ["storage"],
   "host_permissions": ["<all_urls>"],
   "content_scripts": [
